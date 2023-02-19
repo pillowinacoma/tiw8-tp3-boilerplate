@@ -1,7 +1,12 @@
-import { FC, useState } from 'react';
+import { FC } from 'react'
+import Home from './layouts/home'
 
 const App: FC = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
-};
+  return (
+    <div className='h-screen bg-slate-800'>
+      <Home />
+    </div>
+  )
+}
 
-export default App;
+export default App
