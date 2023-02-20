@@ -2,6 +2,8 @@
 
 Sujet : https://aurelient.github.io/tiw8/2022/TP3/
 
+Boilerplate inpired from : https://dev.to/alexeagleson/how-to-create-a-node-and-react-monorepo-with-git-submodules-2g83
+
 L'objectif est de réaliser un clone simplifié de [Gathertown](https://www.gather.town/).
 
 Ce code est la base du projet avec une map, et un perso qui bouge. 
