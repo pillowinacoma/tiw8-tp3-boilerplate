@@ -1,18 +1,23 @@
-import * as React from 'react'
+import React, { memo, useMemo, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../store'
-import { movePlayer } from '../slices/board-slice'
+import { movePlayer, setHeight, setWidth } from '../slices/board-slice'
 import { useAppSelector } from '../hooks'
-import samplemap from '@img/samplemap_16.png'
-import alex from '@img/Alex.png'
-import bob from '@img/Bob.png'
-import adam from '@img/Adam.png'
-import amelia from '@img/Amelia.png'
+import samplemap from '@/img/samplemap_16.png'
+import alex from '@/img/Alex.png'
+import bob from '@/img/Bob.png'
+import adam from '@/img/Adam.png'
+import amelia from '@/img/Amelia.png'
 import { useCallback, useEffect } from 'react'
 import { AvatarPicker } from './avatar-picker'
 
 export const Board: React.FC = () => {
   const board = useAppSelector((state) => state.board)
+  const gridRef = useRef<HTMLDivElement>(null)
+  const dispatch = useDispatch<AppDispatch>()
+
+  const tileWidth = Math.floor(window.innerHeight / 60) 
+
   const playerPosition: [number, number] = useAppSelector(
     (state) => state.playerPosition
   )
@@ -23,8 +28,6 @@ export const Board: React.FC = () => {
   const remotePlayerAvatar: string = useAppSelector(
     (state) => state.remotePlayerAvatar
   )
-
-  const dispatch = useDispatch<AppDispatch>()
 
   const keyDownHandler = useCallback(
     (event: KeyboardEvent) => {
@@ -49,18 +52,19 @@ export const Board: React.FC = () => {
     [playerPosition]
   )
 
-  const boardStyle: React.CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(60, 16px)',
-    gridTemplateRows: 'repeat(60, 16px)',
-    gridColumnGap: '0px',
-    gridRowGap: '0px',
-    backgroundImage: 'url(' + samplemap + ')',
-    backgroundRepeat: 'no-repeat',
-  }
+  const boardStyle = {
+    display: `grid`,
+    gridTemplateColumns: `repeat(60, ${tileWidth}px)` as const,
+    gridTemplateRows: `repeat(60, ${tileWidth}px)` as const,
+    gridColumnGap: `0px` as const,
+    gridRowGap: `0px` as const,
+    backgroundImage: `url(` + samplemap + `)`,
+    backgroundSize: `${60 * tileWidth}px` as const,
+    backgroundRepeat: `no-repeat` as const,
+}
 
   const cellStyle: React.CSSProperties = {
-    width: '16px',
+    width: `${tileWidth}px`,
     padding: '0px',
     textAlign: 'center',
   }
@@ -113,15 +117,15 @@ export const Board: React.FC = () => {
   }, [keyDownHandler])
 
   return (
-    <div className="flex flex-row space-x-2">
-      <div className="flew-grow-0" style={boardStyle}>
+    <div className="flex flex-row space-x-2 max-h-screen h-screen">
+      <div className="flew-grow-0 h-screen aspect-square" ref={gridRef} style={boardStyle}>
         {displayPlayers()}
       </div>
-      <div className="flex-grow-0 flex-col space-y-2">
+      {/* <div className="flex-grow-0 flex-col space-y-2">
         <AvatarPicker></AvatarPicker>
         <div className="item h-48">Video1 Placeholder</div>
         <div className="item h-48">Video2 Placeholder</div>
-      </div>
+      </div> */}
     </div>
   )
 }
